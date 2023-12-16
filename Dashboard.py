@@ -285,12 +285,12 @@ col13, col14 , col15 = st.columns(3)
 with col13:
     #st.expander explaining conginitive performance
     Yellow_1 = st.color_picker('Focus Endurance | Reaction Time | Alertness |', "#E3F900")
-    Focus_En = random.uniform(45,80)
-    Not_FocusEnd = random.uniform(35,50)
-    reaction_time = random.uniform(45,80)
-    Non_reaction_time = random.uniform(35,50)
-    Alert_ness = random.uniform(45,80)
-    Non_alertness = random.uniform(35,50)
+    Focus_En = random.uniform(55,82)
+    Not_FocusEnd = random.uniform(45,62)
+    reaction_time = random.uniform(55,82)
+    Non_reaction_time = random.uniform(45,62)
+    Alert_ness = random.uniform(55,82)
+    Non_alertness = random.uniform(45,62)
 
     if Height_BMI >= 68 and Height_BMI < 73.62 or Weight_BMI >= 124 and Weight_BMI < 176.37 :
         st.write("Focus Endurance (%) : " , Focus_En)
@@ -305,12 +305,12 @@ with col13:
     
 with col14:
     Blue_1 = st.color_picker('Reflexive Strength | Accuracy | Agility |', "#00F9D2")
-    Reflexive_strength = random.uniform(45,80)
-    Non_reflexive = random.uniform(35,50)   
-    Accuracy = random.uniform(45,80)
-    Non_Accuracy = random.uniform(35,50)
-    Agility = random.uniform(45,80)
-    Non_Agility = random.uniform(35,50)
+    Reflexive_strength = random.uniform(55,82)
+    Non_reflexive = random.uniform(45,62)   
+    Accuracy = random.uniform(55,82)
+    Non_Accuracy = random.uniform(45,62)
+    Agility = random.uniform(55,82)
+    Non_Agility = random.uniform(45,62)
 
     if Men_BMR >=1600 and Men_BMR < 1800 or Women_BMR >= 1300 and Women_BMR < 1500 :
         st.write("Reflexive Strength (%) : " , Reflexive_strength)
@@ -324,12 +324,12 @@ with col14:
 
 with col15:
     Red_1 = st.color_picker('Sleep Recovery | Executive Functions | Attention |', "#F90000")
-    Sleep_recovery = random.uniform(45,80)
-    Non_sleep = random.uniform(35,50)
-    Executive_functions = random.uniform(45,80)   
-    Non_exective_functions = random.uniform(35,50)
-    Attention = random.uniform(45,80)
-    Non_Attention = random.uniform(35,50)
+    Sleep_recovery = random.uniform(55,82)
+    Non_sleep = random.uniform(45,62)
+    Executive_functions = random.uniform(55,82)   
+    Non_exective_functions = random.uniform(45,62)
+    Attention = random.uniform(55,82)
+    Non_Attention = random.uniform(45,62)
 
         
     if bai >=21 and bai < 38 : 
