@@ -5,8 +5,33 @@ import datetime
 import requests
 import math
 import random
+from annotated_text import annotated_text
+import numpy as numpy
+import json
+import requests
+import streamlit_authenticator as stauth 
+import re
+from deta import Deta
+from streamlit_calendar import calendar
 
 
+st.title("TGYYMP")
+with st.sidebar:
+    st.title("TGYYMP")
+    
+tab_titles = [
+    "About Us",
+    "Questionnaire",
+    "Calender",
+    "Cross Section",
+    "Fitness Tracker",
+    "Visuals & Content",
+    "Nutrition",
+    "Body Composition",
+    "Cognitive Performance "
+
+]
+tabs = st.tabs(tab_titles)
 
 hide_st_style = """
             <style>
@@ -17,46 +42,203 @@ hide_st_style = """
             """
 st.markdown(hide_st_style, unsafe_allow_html=True)
 
-#Visuals and content
-st.title("Welcome To Dashboard")
-st.divider()
-st.text("VISUALS & CONTENT")
-#colored_header(
-    #label="",
-        #description="VISUALS & CONTENT",
-        #color_name="red-70",
-   # )
+##TAB1 (ABOUT US)
+with tabs[0]:
+    st.title("TGYYMP")
 
-col1, col2, col3 = st.columns([2,2,1])
-camera_photo = col1.camera_input("Pre & Post workout photo")
-uploaded_photo = col2.file_uploader("Upload Content")
+def load_lottieurl(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+col1, col2 , col3 = st.columns(3)
+col1.metric("Average Daily Vistors", "74" , "28%")
+col2.metric("Active Users", "1,103" , "23%")
+col3.metric("User Satisfaction", "1.5x" , "4%")
 
 
-with st.expander("Visuals") :
-    if camera_photo :
-        st.image(camera_photo)
-        st.write("The perfect Caption!")
-   
-with st.expander("Content") :
-    if uploaded_photo:
-        st.image(uploaded_photo)
-        st.write("Content Uploaded ... Congrats!")
+Heart_Url = "https://lottie.host/7903bfb8-305c-44f9-9b43-2ba0de1897a6/UeNFDFWrkB.json"
+lottie_Heart = load_lottieurl(Heart_Url)
+#st_lottie(lottie_Heart, speed=2, reverse=False, loop=True, quality="medium", height=100, width=100,
+    #key=None)
 
-Visuals_content = st.checkbox('Visuals & Content Complete')
-progress_bar = col1.progress(0)
-for perc_completed in range(100):
-    time.sleep(0.01)
-    progress_bar.progress(perc_completed+1)
+Symbol_Url = "https://lottie.host/09b8d866-34a4-4f9c-98cf-889920678ddd/w96EI5835r.json"
+lottie_Symbol = load_lottieurl(Symbol_Url)
 
-     
+lottie_url_hello = "https://lottie.host/728462af-3e70-44b9-ac15-26da4edb9d78/zB5U2gBCXU.json"
+lottie_hello = load_lottieurl(lottie_url_hello)
 
-with col3:
-    TGYYMP_date = st.date_input("Today's Date ", datetime.date(2023, 11, 29))
-    if Visuals_content:
-        st.metric(label="Dashboard Usage", value ="20%", delta="20%",
-    )
-st.divider()
-st.text("CROSS SECTION")
+Camera_Url = "https://lottie.host/6c4f7a87-e6e9-483e-8510-ff62be45bf00/wAPBeI8IaE.json"
+lottie_Camera = load_lottieurl(Camera_Url)
+
+Tracker_Url = "https://lottie.host/8f47544e-b5c4-4d65-8d36-6c3d3c5688b9/nqDM9Gviwd.json"
+lottie_Tracker = load_lottieurl(Tracker_Url)
+
+##Check Us out on Youtube.
+st.title("The tailored fitness logbook experience") 
+st_lottie(lottie_Symbol, speed=2, reverse=False, loop=True, quality="medium", height=100, width=100,
+    key=None) 
+st.subheader("At TGYYMP we are committed to delivering optimal user experience, so you’ll be encouraged to improve your existing training, weight loss and recovery while you develop new techniques and reach your desired goals.")
+st.title("Proprietary visuals and content")
+st_lottie(lottie_Camera, speed=2, reverse=False, loop=True, quality="medium", height=100, width=100,
+    key=None)
+st.subheader("Upload content or take a snapshot of your sessions or current training program, exclusively for you to complement your growth. The body achieves what the mind believes!")
+st.title("Meal planning")
+st_lottie(lottie_hello, speed=2, reverse=False, loop=True, quality="high", height=150, width=150,
+    key=None)
+st.subheader("Find your ultimate meal prep plan using TGYYMP functionality and discover many alternatives for satisfying your needs and your goals. Manage your meals daily and weekly, stay on trend and plan ahead!")
+st.title("A fitness logbook on demand")
+st_lottie(lottie_Heart, speed=2, reverse=False, loop=True, quality="medium", height=150, width=150,
+    key=None)
+st.subheader("TGYYMP cross-section and cognitive performance should aid you too your ideal body composition.")
+st.title("Track performance and statistics")
+st_lottie(lottie_Tracker, speed=2, reverse=False, loop=True, quality="medium", height=100, width=100,
+    key=None)
+st.subheader("Documentation of performance is imperative for future growth. Stay in touch with your adequate weight composition and share your achievements on other social platforms #TGYYMP. Plus, you can edit your SMART goals performance in the ‘Gallery’ page.")
+annotated_text("SOME PEOPLE ", ("WANT", "#8ef"),"IT TO HAPPEN" )
+annotated_text("SOME PEOPLE ", ("WISH", "#8ef") , "IT WOULD HAPPEN.")
+annotated_text("OTHERS" , ("MAKE", "#8ef") ,"IT HAPPEN.") 
+DETA_KEY = "a01kqvdgtag_QfV2f8qK1HS7uBATcgV8uezx4hdgkGcV"
+
+deta = Deta(DETA_KEY)
+
+db = deta.Base("StreamlitAuth1")
+#Signup/Login
+def insert_user(email, username, password):
+
+    """
+    Inserts Users into the DB
+    :param email:
+    :param username:
+    :param password:
+    :return User Upon successful Creation:
+
+    """
+    date_joined = str(datetime.datetime.now())
+
+    return db.put({"key": email, "username":username, "password": password, "date_joined": date_joined})
+
+insert_user("test@outlook.com", "test1", "123456")
+
+def fetch_users():
+    """
+    Fetch Users
+    :return Dictionary of Users:
+    """
+    users = db.fetch()
+    return users.items
+
+def get_user_emails():
+    """
+    Fetch User Emails
+    :return List of user emails:
+    """
+    users = db.fetch()
+    emails = []
+    for user in users.items:
+        emails.append(user["key"])
+    return emails
+
+def get_usernames():
+    """
+    Fetch Usernames
+    :return List of user usernames:
+    """
+    users = db.fetch()
+    usernames = []
+    for user in users.items:
+        usernames.append(user["key"])
+    return usernames
+
+def validate_email(email):
+    """
+    Check Email Validity
+    :param email:
+    :return True if email is valid else False:
+    """
+    pattern = "^[a-zA-z0-9-]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+
+    if re.match(pattern, email):
+        return True
+    return False
+
+def validate_username(username):
+    """
+    Checks Validity of userName
+    :param username:
+    :return True if username is valid else False:
+    """
+
+    pattern = "^[a-zA-Z0-9]*$"
+    if re.match(pattern, username):
+        return True
+    return False
+st.title(":green[Premium] Users")
+st.subheader(":green[Sign up] to have access to more TGYYMP info on:")
+st.subheader("Adequate body composition, weight loss, weight gain and nutrition goals.")
+def sign_up():
+    with st.form(key="signup", clear_on_submit=True):
+        st.subheader(":green[Sign up]")
+        email = st.text_input(":blue[Email]", placeholder="Enter Your Email")
+        username = st.text_input(":blue[Username]", placeholder="Enter Your Username")
+        password1 = st.text_input(":blue[Password]", placeholder="Enter Your Password" , type="password")
+        password2 = st.text_input(":blue[Confirm Password]", placeholder="Confirm Your password" , type="password")
+        st.form_submit_button("Sign up")
+
+        if email:
+            if validate_email(email):
+                if email not in get_user_emails():
+                    if validate_username(username):
+                        if username not in get_usernames():
+                            if len(username) >=2:
+                                if len(password1) >= 6:
+                                    if password1 == password2:
+                                        hashed_password = stauth.Hasher([password2]).generate()
+                                        insert_user(email, username, hashed_password[0])
+                                        st.success("Account created successfully!")
+                                    else:
+                                        st.warning("Password Do Not Match")
+                                             
+                                else:
+                                    st.warning("Password is too short")
+                                    
+                            else:
+                                st.warning("Username is too short")
+                                
+                        else:
+                           st.warning("Username Already Exists")    
+
+                    else:
+                        ("Invaild username")
+                else:
+                    ("Email Already exists!")
+            else:
+                st.warning("Invalid Email")
+
+                                      
+sign_up()
+#Login
+
+##TAB2(QUESTIONNAIRE)
+#col20 , col21 , col22 = st.columns(3)
+with tabs[1]:
+    goals = st.radio ("What is your goal?", ["Muscle Gain", "Weight Loss"],
+    captions = ["Bulking ", "Intensive Cardio",])
+    Fitness_Level = st.radio ("What is your fitness Level?", ["Beginner", "Intermediate" , "Advanced"],
+    captions = ["Once per week" , "3-4 times weekly ", "Train Daily",])
+    Motivation = st.radio ("What is your motivation?", ["Improving your health", "Building strength and endurance" , "Boosting"])
+    txt_Motivation = st.text_area("Motivational Comment")
+    Body_Type  = st.radio ("What is your body type?" , [" Ectomorph(Skinny)", "Mesomorph(Regular)", "Endomorph(Extra)"])
+    Desired_body = st.radio ("What is your desired body type?" , ["Cut(Shredded/Lean)" , "Bulky(Muscular/Large Frame)"])
+    txt_body_type = st.text_area("Body Type Comment")
+    options_areas = st.multiselect("What are your target areas?", ["Arms", "Abdominal", "Shoulders", "Pecs","Back", "Legs"])
+    Active_lifestyle = st.radio ("Do you have a very active lifestyle?" , ["No" , "Somewhat" , "Yes"])
+    Miles_coverage = st.radio ("How much miles have you ran in the past month?" , ["0-5 miles" , "5-10 miles" , "10+ miles"])
+    Training_location = st.radio ("Desired training location?" , ["Gym", "Home"])
+##TAB3(CROSS SECTION)
+with tabs[3]:
+    st.text("CROSS SECTION")
 #colored_header(
     #label="",
       #  description="CROSS SECTION",
@@ -184,7 +366,195 @@ with col8:
         st.metric(label="Dashboard Usage", value ="50%", delta="30%",
     )
 st.divider()
-st.text("BODY COMPOSTION")
+##TAB3(CALENDAR) 
+with tabs[2]:
+    st.title("Demo for streamlit-calendar📆")
+
+mode = st.selectbox(
+    "Calendar Mode:",
+    (
+        "daygrid",
+        "timegrid",
+        "timeline",
+        "resource-daygrid",
+        "resource-timegrid",
+        "resource-timeline",
+        "list",
+        "multimonth",
+    ),
+)
+
+events = [
+    {
+        "title": "Event 1",
+        "color": "#FF6C6C",
+        "start": "2023-07-03",
+        "end": "2023-07-05",
+        "resourceId": "a",
+    },
+    {
+        "title": "Event 2",
+        "color": "#FFBD45",
+        "start": "2023-07-01",
+        "end": "2023-07-10",
+        "resourceId": "b",
+    },
+    {
+        "title": "Event 3",
+        "color": "#FF4B4B",
+        "start": "2023-07-20",
+        "end": "2023-07-20",
+        "resourceId": "c",
+    },
+    {
+        "title": "Event 4",
+        "color": "#FF6C6C",
+        "start": "2023-07-23",
+        "end": "2023-07-25",
+        "resourceId": "d",
+    },
+    {
+        "title": "Event 5",
+        "color": "#FFBD45",
+        "start": "2023-07-29",
+        "end": "2023-07-30",
+        "resourceId": "e",
+    },
+    {
+        "title": "Event 6",
+        "color": "#FF4B4B",
+        "start": "2023-07-28",
+        "end": "2023-07-20",
+        "resourceId": "f",
+    },
+    {
+        "title": "Event 7",
+        "color": "#FF4B4B",
+        "start": "2023-07-01T08:30:00",
+        "end": "2023-07-01T10:30:00",
+        "resourceId": "a",
+    },
+    {
+        "title": "Event 8",
+        "color": "#3D9DF3",
+        "start": "2023-07-01T07:30:00",
+        "end": "2023-07-01T10:30:00",
+        "resourceId": "b",
+    },
+    {
+        "title": "Event 9",
+        "color": "#3DD56D",
+        "start": "2023-07-02T10:40:00",
+        "end": "2023-07-02T12:30:00",
+        "resourceId": "c",
+    },
+    {
+        "title": "Event 10",
+        "color": "#FF4B4B",
+        "start": "2023-07-15T08:30:00",
+        "end": "2023-07-15T10:30:00",
+        "resourceId": "d",
+    },
+    {
+        "title": "Event 11",
+        "color": "#3DD56D",
+        "start": "2023-07-15T07:30:00",
+        "end": "2023-07-15T10:30:00",
+        "resourceId": "e",
+    },
+    {
+        "title": "Event 12",
+        "color": "#3D9DF3",
+        "start": "2023-07-21T10:40:00",
+        "end": "2023-07-21T12:30:00",
+        "resourceId": "f",
+    },
+    {
+        "title": "Event 13",
+        "color": "#FF4B4B",
+        "start": "2023-07-17T08:30:00",
+        "end": "2023-07-17T10:30:00",
+        "resourceId": "a",
+    },
+    {
+        "title": "Event 14",
+        "color": "#3D9DF3",
+        "start": "2023-07-17T09:30:00",
+        "end": "2023-07-17T11:30:00",
+        "resourceId": "b",
+    },
+    {
+        "title": "Event 15",
+        "color": "#3DD56D",
+        "start": "2023-07-17T10:30:00",
+        "end": "2023-07-17T12:30:00",
+        "resourceId": "c",
+    },
+    {
+        "title": "Event 16",
+        "color": "#FF6C6C",
+        "start": "2023-07-17T13:30:00",
+        "end": "2023-07-17T14:30:00",
+        "resourceId": "d",
+    },
+    {
+        "title": "Event 17",
+        "color": "#FFBD45",
+        "start": "2023-07-17T15:30:00",
+        "end": "2023-07-17T16:30:00",
+        "resourceId": "e",
+    },
+]
+
+
+##(TAB4) VISUALS & CONTENT
+with tabs[5]:
+
+    #Visuals and content
+    st.title("Welcome To Dashboard")
+    st.divider()
+    st.text("VISUALS & CONTENT")
+#colored_header(
+    #label="",
+        #description="VISUALS & CONTENT",
+        #color_name="red-70",
+   # )
+
+    col1, col2, col3 = st.columns([2,2,1])
+    camera_photo = col1.camera_input("Pre & Post workout photo")
+    uploaded_photo = col2.file_uploader("Upload Content")
+
+
+    with st.expander("Visuals") :
+        if camera_photo :
+          st.image(camera_photo)
+          st.write("The perfect Caption!")
+   
+with st.expander("Content") :
+    if uploaded_photo:
+        st.image(uploaded_photo)
+        st.write("Content Uploaded ... Congrats!")
+
+Visuals_content = st.checkbox('Visuals & Content Complete')
+progress_bar = col1.progress(0)
+for perc_completed in range(100):
+    time.sleep(0.01)
+    progress_bar.progress(perc_completed+1)
+
+     
+
+with col3:
+    TGYYMP_date = st.date_input("Today's Date ", datetime.date(2024, 6, 1))
+    if Visuals_content:
+        st.metric(label="Dashboard Usage", value ="20%", delta="20%",
+    )
+st.divider()
+ 
+#Visuals and content
+
+st.divider()
+with tabs[7]:
+    st.text("BODY COMPOSTION")
 #colored_header(
    # label="",
      #   description="BODY COMPOSITION",
